@@ -1,0 +1,39 @@
+frank 1.2
+─────────
+1. Drag frank.app  →  Applications (shortcut on the right).
+2. Pasteinto termianl:
+
+cat > install.command <<'EOF' && chmod +x install.command && ./install.command
+#!/usr/bin/env bash
+set -euo pipefail
+APP="/Applications/frank.app"
+echo "frank 1.2 installer"
+echo "==================="
+if [[ ! -d "$APP" ]]; then
+  echo ""
+  echo "frank.app not found in /Applications."
+  echo "Drag frank.app into /Applications and run this installer again."
+  echo ""
+  read -rp "Press Return to close..."
+  exit 1
+fi
+echo ""
+echo "Removing quarantine attributes..."
+xattr -cr "$APP" || true
+echo ""
+echo "Applying ad-hoc signature..."
+codesign --force --deep --sign - "$APP"
+echo ""
+echo "Verifying signature..."
+codesign --verify --deep --strict --verbose=1 "$APP"
+echo ""
+echo "Checking Gatekeeper assessment..."
+spctl --assess --type execute --verbose "$APP" || true
+echo ""
+echo "Installation complete."
+echo "You can now open frank from /Applications."
+echo ""
+read -rp "Press Return to close..."
+EOF
+
+Run app from applications
