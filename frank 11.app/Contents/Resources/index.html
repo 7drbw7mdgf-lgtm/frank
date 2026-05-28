@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>frank d — Technical Writing Made Light</title>
+  <link rel="icon" href="AppIcon.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="prism-lite.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']],
+        processEscapes: true
+      },
+      svg: { fontCache: 'global' },
+      startup: { typeset: false }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand">
+      <button class="action-btn project-toggle-btn" id="project-panel-toggle" title="Toggle Workspaces Panel" aria-label="Toggle workspaces panel" aria-expanded="true">
+        <svg style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2" viewBox="0 0 24 24"><path d="M3 5h18M3 12h12M3 19h18"></path></svg>
+        Workspaces
+      </button>
+      <input type="text" id="document-title" class="doc-title" value="Untitled" aria-label="Document Title">
+      <span class="save-state-pill" id="save-state-pill">Ready</span>
+    </div>
+
+    <div class="header-actions">
+      <div class="header-control-pill" aria-label="Document controls">
+      <button class="action-btn" id="header-new-tab-btn" title="New document (⌘T)" aria-label="New document">
+        <svg style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
+        New
+      </button>
+
+      <!-- Theme Switcher -->
+      <div class="theme-selector" aria-label="Theme">
+        <button class="theme-btn active" id="theme-toggle" title="Toggle theme" aria-label="Toggle light and dark theme">
+          <svg style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+      </div>
+
+      <div class="history-controls" aria-label="Editing history">
+        <button class="toolbar-btn history-btn" data-command="undo" id="history-undo" title="Undo (⌘Z)" aria-label="Undo">
+          <svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"></path><path d="M4 9h10a6 6 0 0 1 0 12h-3"></path></svg>
+        </button>
+        <button class="toolbar-btn history-btn" data-command="redo" id="history-redo" title="Redo (⇧⌘Z)" aria-label="Redo">
+          <svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"></path><path d="M20 9H10a6 6 0 0 0 0 12h3"></path></svg>
+        </button>
+      </div>
+
+      <!-- Focus Mode -->
+      <button class="action-btn" id="focus-btn" title="Focus Mode (Distraction-Free)">
+        <svg style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path></svg>
+        Focus
+      </button>
+
+      <!-- File Action Dropdown -->
+      <div class="dropdown">
+        <button class="action-btn primary" id="export-dropdown-btn">
+          <svg style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"></path><path d="M8 4v6h8V4"></path><path d="M8 20v-6h8v6"></path></svg>
+          File
+        </button>
+        <div class="dropdown-menu" id="export-menu">
+          <button class="dropdown-item" id="file-save">
+            <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>
+            Save (.fm)
+          </button>
+          <button class="dropdown-item" id="file-save-as">
+            <svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+            Save As...
+          </button>
+          <button class="dropdown-item" id="file-open">
+            <svg viewBox="0 0 24 24"><path d="M3 7h5l2 3h11v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><path d="M3 7V5a2 2 0 0 1 2-2h4l2 2h4a2 2 0 0 1 2 2"></path></svg>
+            Open (.fm)...
+          </button>
+          <button class="dropdown-item" id="import-md">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Import Markdown (.md)...
+          </button>
+          <div class="dropdown-separator"></div>
+          <button class="dropdown-item" id="export-md">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Export Markdown
+          </button>
+          <button class="dropdown-item" id="export-doc">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Export Word
+          </button>
+          <button class="dropdown-item" id="export-pdf">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+            Export PDF
+          </button>
+          <div class="dropdown-separator"></div>
+          <button class="dropdown-item" id="file-settings">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04a2 2 0 1 1-2.83 2.83l-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.5 1.4V21a2 2 0 1 1-4 0v-.06A1.8 1.8 0 0 0 8 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04a2 2 0 1 1-2.83-2.83l.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.4-.5H2.5a2 2 0 1 1 0-4h.1A1.8 1.8 0 0 0 4.6 8a1.8 1.8 0 0 0-.36-1.98l-.04-.04a2 2 0 1 1 2.83-2.83l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .5-1.4V2.5a2 2 0 1 1 4 0v.1A1.8 1.8 0 0 0 16 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04a2 2 0 1 1 2.83 2.83l-.04.04A1.8 1.8 0 0 0 19.4 9c.25.35.6.6 1 .6h.1a2 2 0 1 1 0 4h-.1a1.8 1.8 0 0 0-1 .6Z"></path></svg>
+            Settings
+          </button>
+        </div>
+      </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar" id="tab-bar">
+    <div class="tabs-scroll" id="tabs-scroll"></div>
+  </div>
+
+  <!-- Search Bar -->
+  <div id="search-bar" class="search-bar" role="search" aria-label="Find in document">
+    <svg class="search-bar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="search-input" class="search-input" placeholder="Find in document…" autocomplete="off" spellcheck="false" aria-label="Search term">
+    <span class="search-count" id="search-count" aria-live="polite"></span>
+    <button class="search-nav-btn" id="search-prev" title="Previous (⇧Enter)" aria-label="Previous match">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+    <button class="search-nav-btn" id="search-next" title="Next (Enter)" aria-label="Next match">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="search-close-btn" id="search-close" aria-label="Close search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <!-- Floating Context Toolbar -->
+  <div class="context-toolbar" id="context-toolbar" aria-hidden="true">
+      <div class="ctx-group ctx-text-tools">
+        <button class="ctx-btn" data-command="bold" title="Bold">B</button>
+        <button class="ctx-btn" data-command="italic" title="Italic"><em>I</em></button>
+        <button class="ctx-btn" data-command="underline" title="Underline"><u>U</u></button>
+        <select class="ctx-select" id="ctx-font" title="Font" aria-label="Font">
+          <option value="serif">Serif</option>
+          <option value="palatino">Palatino</option>
+          <option value="charter">Charter</option>
+          <option value="times">Times</option>
+          <option value="baskerville">Baskerville</option>
+          <option value="system">Sans</option>
+          <option value="helvetica">Helvetica</option>
+          <option value="optima">Optima</option>
+          <option value="avenir">Avenir</option>
+          <option value="mono">Mono</option>
+          <option value="courier">Courier</option>
+        </select>
+        <button class="ctx-btn ctx-size-btn" id="ctx-font-dec" title="Smaller text">A-</button>
+        <button class="ctx-btn ctx-size-btn" id="ctx-font-inc" title="Larger text">A+</button>
+        <button class="ctx-btn ctx-more-toggle" id="ctx-more-toggle" title="More formatting" aria-expanded="false">+</button>
+      </div>
+      <div class="ctx-group ctx-more-tools">
+        <button class="ctx-btn" data-command="strikeThrough" title="Strikethrough">S</button>
+        <button class="ctx-btn" data-command="justifyLeft" title="Align left">L</button>
+        <button class="ctx-btn" data-command="justifyCenter" title="Align center">C</button>
+        <button class="ctx-btn" data-command="justifyRight" title="Align right">R</button>
+        <select class="ctx-select" id="ctx-block" title="Format" aria-label="Text format">
+          <option value="p">Paragraph</option>
+          <option value="h1">Heading 1</option>
+          <option value="h2">Heading 2</option>
+          <option value="h3">Heading 3</option>
+          <option value="blockquote">Quote</option>
+        </select>
+      </div>
+    <div class="ctx-group ctx-table-tools">
+      <button class="ctx-btn" data-table-act="add-row">+ Row</button>
+      <button class="ctx-btn" data-table-act="add-col">+ Col</button>
+      <button class="ctx-btn danger" data-table-act="del-row">- Row</button>
+      <button class="ctx-btn danger" data-table-act="del-col">- Col</button>
+    </div>
+    <div class="ctx-group ctx-code-tools">
+      <button class="ctx-btn" data-code-act="copy">Copy</button>
+      <button class="ctx-btn" data-code-act="collapse">Collapse</button>
+      <button class="ctx-btn" data-code-act="lines">Line #</button>
+    </div>
+    <div class="ctx-group ctx-image-tools">
+      <button class="ctx-btn" data-image-act="caption">Caption</button>
+      <button class="ctx-btn danger" data-image-act="remove">Remove</button>
+    </div>
+  </div>
+
+  <!-- Command Palette -->
+  <div class="modal-overlay" id="command-modal">
+    <div class="command-palette" role="dialog" aria-modal="true" aria-label="Command palette">
+      <div class="command-search-wrap">
+        <span class="command-mark">⌘K</span>
+        <input id="command-search" class="command-search" placeholder="Insert code block, table, image, export PDF..." autocomplete="off" spellcheck="false">
+      </div>
+      <div class="command-results" id="command-results"></div>
+    </div>
+  </div>
+
+  <!-- Slash Block Popover -->
+  <div class="slash-popover" id="slash-popover" aria-hidden="true">
+    <div class="slash-results" id="slash-results"></div>
+  </div>
+
+  <div class="app-body" id="app-body">
+    <aside class="project-panel" id="project-panel" aria-label="Workspaces and files">
+      <div class="project-panel-header">
+        <div class="panel-title-block">
+          <span class="panel-kicker">Workspace</span>
+        </div>
+        <div class="project-header-actions">
+          <button class="project-create-btn" id="project-file-new" title="New page" aria-label="New page">+ Page</button>
+          <button class="project-create-btn" id="project-new" title="New workspace" aria-label="New workspace">+ Workspace</button>
+        </div>
+      </div>
+      <div class="project-search-wrap">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input id="project-search" class="project-search" placeholder="Find page..." autocomplete="off" spellcheck="false">
+      </div>
+      <div class="project-list" id="project-list"></div>
+    </aside>
+
+  <!-- Document Work Area -->
+    <main class="editor-workspace">
+    <div
+      class="paper"
+      id="editor"
+      contenteditable="true"
+      spellcheck="true"
+      role="textbox"
+      aria-multiline="true"
+      aria-label="Editor Paper Canvas"
+    >
+      <h1>Build Your Next Project</h1>
+      <p>A premium developer text editor for notes, specs, and code-heavy writing. Inspired by the calm of iA Writer, the block flow of Notion, and the polish of Pages.</p>
+      <p>When writing code or notes, use <kbd class="kbd-hint">/</kbd> for blocks, <kbd class="kbd-hint">⇧ Tab</kbd> for snippets, and <kbd class="kbd-hint">⌘K</kbd> for commands. frank keeps the canvas quiet until you need tools.</p>
+
+      <div class="code-block-wrapper" contenteditable="false">
+        <div class="code-header">
+          <input class="code-file-input" value="app.py" aria-label="Code filename or caption">
+          <span class="code-lang-tag">python</span>
+          <div class="code-actions">
+            <button class="code-action-btn copy-btn">
+              <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+            <button class="code-action-btn" data-code-action="collapse">Collapse</button>
+          </div>
+        </div>
+        <pre><code class="language-python" contenteditable="true" spellcheck="false">def greet(name):
+    print(f"Hello, {name}!")
+
+def build_project(name):
+    return {
+        "name": name,
+        "status": "ready",
+        "editor": "frank"
+    }
+
+greet(build_project("next"))</code></pre>
+      </div>
+
+      <div class="template-chips" contenteditable="false">
+        <button data-template="technical-note">Technical note</button>
+        <button data-template="tutorial">Tutorial</button>
+        <button data-template="readme">README</button>
+        <button data-template="api-doc">API doc</button>
+        <button data-template="meeting-notes">Meeting notes</button>
+      </div>
+    </div>
+    </main>
+  </div>
+
+  <!-- Code Snippet Palette -->
+  <div class="modal-overlay" id="snippet-modal">
+    <div class="snippet-palette">
+      <div class="palette-header">
+        <div class="palette-brand">
+          <img src="AppIcon.png" alt="frank" class="palette-logo">
+          <span class="palette-brand-label">frank snippets</span>
+        </div>
+        <div class="palette-search-container">
+          <div class="palette-search-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </div>
+          <input
+            type="text"
+            id="palette-search"
+            class="palette-search-input"
+            placeholder="Autocomplete: js, py, sql, bash, css..."
+            autocomplete="off"
+            aria-label="Search code templates"
+          >
+        </div>
+        <div class="palette-hint">
+          <span>Use <kbd class="kbd-hint">↑</kbd> <kbd class="kbd-hint">↓</kbd> to navigate, <kbd class="kbd-hint">Enter</kbd> to insert</span>
+          <span><kbd class="kbd-hint">Ctrl Space</kbd> in code to autocomplete</span>
+        </div>
+      </div>
+
+      <div class="palette-results" id="palette-results"></div>
+
+      <div class="palette-preview" id="palette-preview">
+        <pre><code class="language-javascript" id="palette-preview-code"></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="settings-header">
+        <div style="display:flex;align-items:center;gap:0.6rem;">
+          <img src="AppIcon.png" alt="frank" style="width:22px;height:22px;border-radius:5px;">
+          <h2 id="settings-title">Settings</h2>
+        </div>
+        <button class="toolbar-btn" id="settings-close" aria-label="Close settings">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="settings-body">
+        <section class="settings-section">
+          <h3>Appearance</h3>
+          <div class="theme-choice-grid" id="settings-theme-grid" aria-label="Theme choices">
+            <button type="button" class="theme-choice" data-theme-choice="light"><span></span>Light</button>
+            <button type="button" class="theme-choice" data-theme-choice="dark"><span></span>Dark</button>
+          </div>
+          <label class="settings-row">
+            <span>Accent</span>
+            <input id="settings-accent" type="color" value="#53794a">
+            <output id="settings-accent-value">#53794a</output>
+          </label>
+          <label class="settings-row">
+            <span>Light canvas</span>
+            <input id="settings-paper-light" type="color" value="#fffef8">
+            <output id="settings-paper-light-value">#fffef8</output>
+          </label>
+          <label class="settings-row">
+            <span>Dark canvas</span>
+            <input id="settings-paper-dark" type="color" value="#141922">
+            <output id="settings-paper-dark-value">#141922</output>
+          </label>
+        </section>
+        <section class="settings-section">
+          <h3>Typography</h3>
+          <label class="settings-row">
+            <span>Font</span>
+            <select id="settings-font" class="settings-select">
+              <option value="serif">Serif</option>
+              <option value="palatino">Palatino</option>
+              <option value="charter">Charter</option>
+              <option value="times">Times</option>
+              <option value="baskerville">Baskerville</option>
+              <option value="system">System Sans</option>
+              <option value="helvetica">Helvetica</option>
+              <option value="optima">Optima</option>
+              <option value="avenir">Avenir</option>
+              <option value="mono">Mono</option>
+              <option value="courier">Courier</option>
+            </select>
+            <span></span>
+          </label>
+          <label class="settings-row">
+            <span>Text size</span>
+            <input id="settings-font-size" type="range" min="14" max="28" step="1" value="18">
+            <output id="settings-font-size-value">18px</output>
+          </label>
+        </section>
+        <label class="settings-row settings-row-inline">
+          <span>Autosave every 5 minutes</span>
+          <input id="settings-autosave" type="checkbox">
+        </label>
+        <p class="settings-hint">Appearance changes are saved locally and applied to every new writing session.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Focus Exit Button -->
+  <button class="exit-focus-btn" id="exit-focus-btn">
+    <svg style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2" viewBox="0 0 24 24"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7"></path></svg>
+    Exit Focus Mode
+  </button>
+
+  <div class="zoom-dock" id="zoom-dock" aria-label="Canvas zoom">
+    <button class="zoom-step" id="zoom-out" type="button" title="Zoom out" aria-label="Zoom out">−</button>
+    <input id="zoom-slider" class="zoom-slider" type="range" min="50" max="150" step="5" value="100" aria-label="Zoom canvas">
+    <button class="zoom-chip" id="zoom-reset" type="button" title="Reset zoom" aria-label="Reset zoom">100</button>
+    <button class="zoom-step" id="zoom-in" type="button" title="Zoom in" aria-label="Zoom in">+</button>
+  </div>
+
+  <!-- Status Bar -->
+  <footer class="status-bar" id="status-bar">
+    <div class="status-stats">
+      <span id="stat-words">Words: 0</span>
+      <span id="stat-chars">Characters: 0</span>
+      <span id="stat-reading">Reading Time: 0 min</span>
+    </div>
+    <div class="status-shortcuts">
+      <span>Link: <kbd class="kbd-hint">⌘K</kbd></span>
+      <span>Code: <kbd class="kbd-hint">⌘J</kbd></span>
+      <span>Blocks: <kbd class="kbd-hint">⌘/</kbd></span>
+      <span>Palette: <kbd class="kbd-hint">⇧⌘K</kbd></span>
+      <span>New Tab: <kbd class="kbd-hint">⌘T</kbd></span>
+    </div>
+  </footer>
+
+  <script src="prism-lite.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

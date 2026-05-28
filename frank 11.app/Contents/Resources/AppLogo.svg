@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">frank logo</title>
+  <defs>
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#232321"/>
+      <stop offset="1" stop-color="#111210"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff7e9"/>
+      <stop offset="1" stop-color="#eadcc7"/>
+    </linearGradient>
+    <linearGradient id="cursor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#83a879"/>
+      <stop offset="1" stop-color="#54794f"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="106" fill="url(#ink)"/>
+  <path fill="url(#paper)" d="M197 433c-13 0-22-9-22-21s9-21 22-21h18c18 0 27-12 27-35V226h-72c-12 0-21-9-21-21s9-21 21-21h72v-48c0-78 49-116 118-116 33 0 67 13 81 27 8 8 9 17 4 27l-20 38c-6 12-20 15-30 7-13-11-31-19-51-19-27 0-43 18-43 52v32h79c12 0 21 9 21 21s-9 21-21 21h-79v130c0 23 10 35 29 35h15c13 0 22 9 22 21s-9 21-22 21H197Z"/>
+  <rect x="355" y="177" width="16" height="256" rx="8" fill="url(#cursor)"/>
+</svg>
