@@ -1,0 +1,12 @@
+app.js
+index.html
+style.css
+*.swift
+*.py
+node_modules/
+__pycache__/
+work/
+source/
+tests/
+.env
+.DS_Store
