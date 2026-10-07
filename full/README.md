@@ -4,9 +4,13 @@ Frank is a Mac writing app that combines connected notes with tools for technica
 
 Full has **no built-in space or saved-page cap**.
 
-**[Download Frank Full 5.5.1](https://github.com/7drbw7mdgf-lgtm/frank/releases/download/v5.5.1/Frank-5.5.1.dmg)** · [Installation guide](MACOS-INSTALL.md) · [See the interface and features](../README.md)
+**[Download Frank Full 6.0](https://github.com/7drbw7mdgf-lgtm/frank/releases/download/v6.0/Frank-6.0.dmg)** · [Installation guide](MACOS-INSTALL.md) · [See the interface and features](../README.md)
 
 Use folders, tags, search, backlinks, and the knowledge graph to organize your work. Add code blocks, equations, diagrams, tables, images, and checklists to your writing. Import or export familiar document formats, and use Focus mode when you want a quieter writing session.
+
+## What's new in 6.0
+
+Security hardening (shared documents and embeds can no longer reach Frank's native features), working ⌘C/⌘V/⌘X/⌘A shortcuts, a caret that stays put, clean equation selection and copying, paste that keeps paragraphs, real page layout, and a working knowledge graph. See the [installation guide](MACOS-INSTALL.md#whats-new-in-60) for details.
 
 ## Install
 

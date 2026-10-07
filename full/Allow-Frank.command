@@ -1,10 +1,10 @@
 #!/bin/bash
-# Allow a trusted Frank 5.5.1 installation to open on this Mac.
+# Allow a trusted Frank 6.0 installation to open on this Mac.
 # This does not notarize Frank or change system-wide security settings.
 set -euo pipefail
 
 expected_id='com.gemini.frank5'
-expected_version='5.5.1'
+expected_version='6.0'
 check_only=false
 confirmed=false
 app_path=''
@@ -18,7 +18,7 @@ Usage: bash Allow-Frank.command [--check | --yes] ["/Applications/Frank.app"]
   --help   Show this help.
 
 Without a path, checks /Applications/Frank.app, then ~/Applications/Frank.app.
-Only Frank 5.5.1 with a valid bundle signature is accepted. This script removes
+Only Frank 6.0 with a valid bundle signature is accepted. This script removes
 only com.apple.quarantine from that app. It never uses sudo, disables Gatekeeper,
 changes SIP, re-signs the app, downloads code or launches it automatically.
 HELP
